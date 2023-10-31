@@ -10,7 +10,7 @@ import {
   Put, UseGuards
 } from '@nestjs/common';
 import { CoursesRepository } from '../repositories/courses.repository';
-import { CoursesModel } from '../models/courses.model';
+import { CourseModel } from '../models/course.model';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { AdminGuard } from '../../guards/admin.guard';
 
@@ -21,17 +21,17 @@ export class CoursesController {
 
   @Post()
   @UseGuards(AdminGuard)
-  async createCourse(@Body() course: CoursesModel): Promise<CoursesModel> {
+  async createCourse(@Body() course: CourseModel): Promise<CourseModel> {
     return this.coursesDB.addCourse(course);
   }
 
   @Get()
-  async findAllCourses(): Promise<CoursesModel[]> {
+  async findAllCourses(): Promise<CourseModel[]> {
     return this.coursesDB.findAll();
   }
 
   @Get(':id')
-  async getCourse(@Param('id') courseId: string): Promise<CoursesModel> {
+  async getCourse(@Param('id') courseId: string): Promise<CourseModel> {
     const course = await this.coursesDB.getCourse(courseId);
 
     if (!course) {
@@ -45,8 +45,8 @@ export class CoursesController {
   @UseGuards(AdminGuard)
   async updateCourse(
     @Param('courseId') courseId: string,
-    @Body() changes: CoursesModel
-  ): Promise<CoursesModel> {
+    @Body() changes: CourseModel
+  ): Promise<CourseModel> {
     if (changes._id) {
       throw new BadRequestException("Can't update course id");
     }

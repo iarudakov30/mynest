@@ -8,13 +8,22 @@ import { CoursesModule } from './courses/courses.module';
 import { MONGO_CONNECTION } from './constants';
 import { AuthModule } from './auth/auth.module';
 import { GetUserMiddleware } from './middleware/get-user.middleware';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AuthorsModule } from './authors/authors.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(MONGO_CONNECTION),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      playground: true
+    }),
     ProductsModule,
     CoursesModule,
-    AuthModule
+    AuthModule,
+    AuthorsModule
   ],
   controllers: [AppController],
   providers: [AppService]

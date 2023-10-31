@@ -2,17 +2,23 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filters/http.filter';
 import { FallbackExceptionFilter } from './filters/fallback.filter';
-import { ValidationError, ValidationPipe } from '@nestjs/common';
+import {
+  INestApplication,
+  ValidationError,
+  ValidationPipe
+} from '@nestjs/common';
 import { ValidationFilter } from './filters/validation.filter';
 import { ValidationException } from './filters/validation.exception';
+import { GraphqlFilter } from './filters/graphql.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app: INestApplication = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.useGlobalFilters(
     // new ValidationFilter(),
-    // new FallbackExceptionFilter(),
-    // new HttpExceptionFilter()
+    // new HttpExceptionFilter(),
+    // new GraphqlFilter(),
+    // new FallbackExceptionFilter()
   );
   app.useGlobalPipes(
     new ValidationPipe({
