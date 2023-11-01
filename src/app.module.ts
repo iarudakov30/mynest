@@ -1,29 +1,47 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { CoursesModule } from './courses/courses.module';
-import { MONGO_CONNECTION } from './constants';
 import { AuthModule } from './auth/auth.module';
-import { GetUserMiddleware } from './middleware/get-user.middleware';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthorsModule } from './authors/authors.module';
+import { EventsModule } from './events/events.module';
+
+import { GetUserMiddleware } from './middleware/get-user.middleware';
+
+import * as process from 'process';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(MONGO_CONNECTION),
+    ConfigModule.forRoot({
+      envFilePath: ['.env'],
+      isGlobal: true
+    }),
+    MongooseModule.forRoot(process.env['MONGO_CONNECTION']),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
       playground: true
     }),
+    TypeOrmModule.forRoot({
+      type: 'mongodb',
+      url: process.env['MONGO_CONNECTION'],
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      synchronize: true,
+      logging: true
+    }),
     ProductsModule,
     CoursesModule,
     AuthModule,
-    AuthorsModule
+    AuthorsModule,
+    EventsModule
   ],
   controllers: [AppController],
   providers: [AppService]

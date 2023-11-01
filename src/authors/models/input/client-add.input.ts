@@ -3,7 +3,7 @@ import { IsNotEmpty, MinLength, IsEnum } from 'class-validator';
 import { Gender } from '../author.types';
 
 @InputType()
-export class AuthorAddInput {
+export class ClientAddInput {
   @Field()
   @IsNotEmpty()
   @MinLength(5)
@@ -15,8 +15,6 @@ export class AuthorAddInput {
   gender: Gender;
 
   @Field(() => Boolean, { defaultValue: true })
-  status?: string;
-
-  @Field(() => [String], { defaultValue: [] })
-  posts?: string[];
+  @IsNotEmpty()
+  status: boolean;
 }

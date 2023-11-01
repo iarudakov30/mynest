@@ -1,10 +1,9 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Types } from 'mongoose';
 
 @ObjectType()
 export class Post {
   @Field(() => ID)
-  _id: Types.ObjectId;
+  _id: string;
 
   @Field()
   title: string;

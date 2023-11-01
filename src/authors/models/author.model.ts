@@ -17,5 +17,5 @@ export class Author {
   gender: Gender;
 
   @Field(() => [Post], { defaultValue: [] })
-  posts: Post[];
+  posts: string[];
 }
